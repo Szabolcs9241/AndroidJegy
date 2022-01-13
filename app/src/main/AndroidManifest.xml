@@ -10,10 +10,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AndroidApp1">
         <activity
-            android:name=".MainActivity2"
+            android:name=".JegyStatisztika"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".JegyFelvetel"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
