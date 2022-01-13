@@ -3,11 +3,9 @@ package com.example.androidapp1;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.NumberPicker;
@@ -31,53 +29,43 @@ public class JegyFelvetel extends AppCompatActivity {
 
         builder1.setPositiveButton(
                 "OK",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
+                (dialog, id) -> dialog.cancel());
         AlertDialog alertDialog = builder1.create();
 
-        final NumberPicker jegyPicker = (NumberPicker) findViewById(R.id.jegyPicker);
+        final NumberPicker jegyPicker = findViewById(R.id.jegyPicker);
         jegyPicker.setMaxValue(5);
         jegyPicker.setMinValue(1);
         jegyPicker.setValue(1);
         jegyPicker.setWrapSelectorWheel(false);
 
-        Button button = (Button) findViewById(R.id.button);
-        button.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                EditText nev = (EditText) findViewById(R.id.editTextTextPersonName);
+        Button button = findViewById(R.id.button);
+        button.setOnClickListener(v -> {
+            EditText nev = findViewById(R.id.editTextTextPersonName);
 
-                if(nev.getText().toString().equals("") || !(jegyPicker.getValue() >= 1 && jegyPicker.getValue() <= 5)) {
-                    alertDialog.show();
-                } else {
-                    addData(nev.getText().toString(), jegyPicker.getValue());
-                }
-
+            if (nev.getText().toString().equals("") || !(jegyPicker.getValue() >= 1 && jegyPicker.getValue() <= 5)) {
+                alertDialog.show();
+            } else {
+                addData(nev.getText().toString(), jegyPicker.getValue());
             }
+
         });
 
-        Button ertekel = (Button) findViewById(R.id.button2);
-        ertekel.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                openMainActivity2();
-            }
-        });
+        Button ertekel = findViewById(R.id.button2);
+        ertekel.setOnClickListener(v -> openJegyStatisztika());
 
     }
 
-    public void openMainActivity2() {
-        Intent intent = new Intent (this, JegyStatisztika.class);
+    public void openJegyStatisztika() {
+        Intent intent = new Intent(this, JegyStatisztika.class);
         startActivity(intent);
     }
 
     public void addData(String nev, int jegy) {
         boolean insertData = database.addData(nev, jegy);
-        if(insertData) {
-            Utility.toastMessage(instance,"Sikeres rögzítés!");
+        if (insertData) {
+            Utility.toastMessage(instance, "Sikeres rögzítés!");
         } else {
-            Utility.toastMessage(instance,"Hiba a felvétel közben");
+            Utility.toastMessage(instance, "Hiba a felvétel közben");
         }
     }
 }

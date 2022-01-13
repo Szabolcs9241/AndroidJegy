@@ -2,10 +2,10 @@ package com.example.androidapp1;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListAdapter;
@@ -26,31 +26,30 @@ public class JegyStatisztika extends AppCompatActivity {
         loadData();
         instance = this;
 
-        Button button = (Button) findViewById(R.id.button3);
-        button.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                database.dropTable();
-                Utility.toastMessage(instance,"Az adatok sikeresen törlésre kerültek!");
-                openMainActivity();
-                finish();
-            }
+        Button button = findViewById(R.id.button3);
+        button.setOnClickListener(v -> {
+            database.dropTable();
+            Utility.toastMessage(instance, "Az adatok sikeresen törlésre kerültek!");
+            openJegyFelvetel();
+            finish();
         });
 
     }
 
+    @SuppressLint("DefaultLocale")
     private void loadData() {
         Cursor data = database.getData();
-        ArrayList<String> list = new ArrayList<String>();
+        ArrayList<String> list = new ArrayList<>();
         while (data.moveToNext()) {
-            list.add(data.getString(1) + " - " + String.format("%.2f", (Double.valueOf(data.getInt(2)) / data.getInt(3))));
+            list.add(data.getString(1) + " - " + String.format("%.2f", ((double) data.getInt(2) / data.getInt(3))));
         }
         ListAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, list);
-        ListView lw = (ListView) findViewById(R.id.listView);
+        ListView lw = findViewById(R.id.listView);
         lw.setAdapter(adapter);
     }
 
-    public void openMainActivity() {
-        Intent intent = new Intent (this, JegyFelvetel.class);
+    public void openJegyFelvetel() {
+        Intent intent = new Intent(this, JegyFelvetel.class);
         startActivity(intent);
     }
 }
